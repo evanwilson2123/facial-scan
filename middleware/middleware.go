@@ -1,0 +1,32 @@
+package middleware
+
+import (
+	"facial-scan/utils"
+	"strings"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+func AuthRequired() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		authHeader := c.Get("Authoriization")
+		if authHeader == "" {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error":"missing or invalid token"})
+		}
+
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error":"missing or invalid token"})
+		}
+
+		tokenString := parts[1]
+
+		claims, err := utils.ValidateToken(tokenString)
+		if err != nil {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error":"invalid or expired token"})
+		}
+
+		c.Locals("user_id", claims.UID)
+		return c.Next()
+	}
+}
