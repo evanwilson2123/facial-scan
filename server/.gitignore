@@ -1,0 +1,8 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore environment variable files
+.env
+
+# Ignore Firebase admin SDK JSON file
+config/face-scan-71bdf-firebase-adminsdk-5n1l4-e49277c639.json
