@@ -1,4 +1,4 @@
-# **Facial Scan App**
+# **Facial Scan App (backend)**
 
 ## Overview
 
